@@ -13,11 +13,7 @@ import java.util.List;
 @RequestMapping("/api/home/feedback")
 public class FeedbackController {
 
-    private final FeedbackService feedbackService;
-
-    public FeedbackController(FeedbackService feedbackService) {
-        this.feedbackService = feedbackService;
-    }
+    private FeedbackService feedbackService;
 
     @GetMapping
     public List<Feedback> getAll() {

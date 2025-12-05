@@ -8,7 +8,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateAccountRequest {
+
+//    private Long id;
+//
+//    private AccountPublic accountPublic;
+
     private String username;
-    private String email;
-    private String profileImage;
+
+    private String icon;
 }

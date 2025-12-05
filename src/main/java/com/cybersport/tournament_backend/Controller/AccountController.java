@@ -5,7 +5,9 @@ import com.cybersport.tournament_backend.dto.request.ChangePasswordRequest;
 import com.cybersport.tournament_backend.dto.request.CreateAccountRequest;
 import com.cybersport.tournament_backend.dto.request.LoginRequest;
 import com.cybersport.tournament_backend.dto.request.UpdateAccountRequest;
+import com.cybersport.tournament_backend.dto.response.LoginResponse;
 import com.cybersport.tournament_backend.model.Account;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,45 +22,59 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    // Получить профиль текущего пользователя (просмотр чужого профиля)
-    @GetMapping("/profile")
-    public ResponseEntity<Account> getProfile() {
-        Account account = accountService.getCurrentAccount();
-        return ResponseEntity.ok(account);
-    }
-
-    // Создать новый аккаунт (регистрация)
+    @Operation(
+            summary = "Регистрация",
+            description = ""
+    )
     @PostMapping("/register")
     public ResponseEntity<Account> register(@RequestBody CreateAccountRequest request) {
         Account account = accountService.register(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(account);
     }
 
-    // Обновить профиль
+    @Operation(
+            summary = "Сохранить изменения профиля",
+            description = ""
+    )
     @PutMapping("/profile")
     public ResponseEntity<Account> updateProfile(@RequestBody UpdateAccountRequest request) {
         Account account = accountService.updateProfile(request);
         return ResponseEntity.ok(account);
     }
 
-    // Изменить пароль
+    @Operation(
+            summary = "Изменить пароль",
+            description = ""
+    )
     @PutMapping("/password")
     public ResponseEntity<String> changePassword(@RequestBody ChangePasswordRequest request) {
         accountService.changePassword(request);
         return ResponseEntity.ok("Пароль успешно изменён");
     }
 
-    // Удалить аккаунт
+    @Operation(
+            summary = "Удалить профиль",
+            description = "помечает аккаунт удаленным, не удаляет из БД"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
         accountService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
-    // Логин
+    @Operation(
+            summary = "Авторизация",
+            description =
+                    "возвращает JWT токен" +
+                    " — это строка из трёх частей (header.payload.signature), закодированных в Base64URL\n" +
+                    "JWT указывается для проверки авторизации пользователя в последующих запросах\n" +
+                    "Перед каждым запросом к api нужен заголовок: Authorization: Bearer \'токен\'"
+    )
     @PostMapping("/login")
-    public ResponseEntity<Account> login(@RequestBody LoginRequest request) {
-        Account account = accountService.login(request);
-        return ResponseEntity.ok(account);
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        LoginResponse response = accountService.login(request);
+        return ResponseEntity.ok(response);
     }
+
+
 }

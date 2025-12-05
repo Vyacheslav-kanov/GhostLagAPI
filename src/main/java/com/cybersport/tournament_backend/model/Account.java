@@ -6,9 +6,9 @@ import lombok.*;
 @Entity
 @Table(name = "accounts")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class Account {
 
     @Id
@@ -17,6 +17,12 @@ public class Account {
 
     // связь с AuthAccount (по id)
     @OneToOne
-    @JoinColumn(name = "auth_account_id", nullable = false, unique = true)
-    private AuthAccount authAccount;
+    @JoinColumn(name = "account_private_id", nullable = false, unique = true)
+    private AccountPrivateData accountPrivateData;
+
+    @OneToOne
+    @JoinColumn(name = "account_public_id", nullable = false, unique = true)
+    private AccountPublicData accountPublicData;
+
+    private boolean isDeleted;
 }

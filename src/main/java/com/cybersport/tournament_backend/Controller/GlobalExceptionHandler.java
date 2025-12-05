@@ -1,9 +1,7 @@
 package com.cybersport.tournament_backend.Controller;
 
-import com.cybersport.tournament_backend.Exception.AccountNotFoundOrBadPasswordException;
-import com.cybersport.tournament_backend.Exception.UserMailAlreadyExistsException;
-import com.cybersport.tournament_backend.Exception.UsernameAlreadyExistsException;
-import com.cybersport.tournament_backend.dto.responce.ApiError;
+import com.cybersport.tournament_backend.Exception.*;
+import com.cybersport.tournament_backend.dto.response.ApiError;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,8 +38,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
     }
 
+    @ExceptionHandler(LoginAlreadyExistsException.class)
+    public ResponseEntity<ApiError> handleLoginAlreadyExists(LoginAlreadyExistsException ex) {
+        ApiError error = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage()
+        );
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
     @ExceptionHandler(EntityNotFoundException.class)
-    public ResponseEntity<ApiError> HundleEntityNotFound(EntityNotFoundException ex){
+    public ResponseEntity<ApiError> handleEntityNotFound(EntityNotFoundException ex){
+        ApiError error = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage()
+        );
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiError> handleUserNotFound(UserNotFoundException ex){
         ApiError error = new ApiError(
                 HttpStatus.CONFLICT.value(),
                 ex.getMessage()
